@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1013</width>
+    <height>665</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>637</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="Water">
+       <attribute name="title">
+        <string>Water</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="DrawingCanvas" name="water" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Gas">
+       <attribute name="title">
+        <string>Gas</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="DrawingCanvas" name="gas" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Gas_per_Dag">
+       <attribute name="title">
+        <string>Gas per Dag</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="DrawingCanvas" name="gas_per_dag" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Elektriciteit">
+       <attribute name="title">
+        <string>Elektriciteit</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="DrawingCanvas" name="elektriciteit" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Elektriciteit_per_Dag">
+       <attribute name="title">
+        <string>Elektriciteit per Dag</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="DrawingCanvas" name="elektriciteit_per_dag" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Zonnepanelen">
+       <attribute name="title">
+        <string>Zonnepanelen</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="DrawingCanvas" name="zonnepanelen" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QWidget" name="toolBar" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1013</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DrawingCanvas</class>
+   <extends>QWidget</extends>
+   <header>drawing_canvas</header>
+   <container>1</container>
+   <slots>
+    <slot>drawWaterVerbruik()</slot>
+    <slot>drawGasVerbruik()</slot>
+    <slot>drawElektriciteitsVerbruik()</slot>
+    <slot>drawZonnepanelen()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

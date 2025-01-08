@@ -1,0 +1,499 @@
+### Version 0.1.0
+- Simple plotting example for matplotlib in Pythonista
+- Testing interface between Pythonista and Working Copy
+- saved from Pythonista..
+- Testing how to push to GitHub again
+- Added Meterstanden to the Pythonista Repository
+- Moving all sources and plots to GitHub...
+- Moved Javascript Bokeh output files into Dropbox again...
+- Adapted new location of csv file...
+- new data entered
+- Add HoverTool to plot: "Controle op berekening totale SMA"
+- Daily updates to Meterstanden.csv Added and optimised plot for "Controle op berekening totale SMA"
+- daily update
+- daily update
+- daily update
+- add label to last point in sma total check plot
+- Daily updates
+- Merge branch 'master' of git@github.com:rhuygen/Pythonista.git
+- Daily updates
+- Daily updates
+- daily updates
+- daily update
+- Daily updates
+- Check where script is running and correct csv file location accordingly
+- fix unknown variable on_laptop
+- Daily updates
+- Check for Bokeh and Pandas availability
+- Cleanup code and add conditions for iPad and laptop
+- Rename files such that the name tell me which plot library and which numerical library has been used
+- We don't need this example file here
+- Daily update
+- These files were renamed to contain plot and numeric library in filename
+- Python Jupyter notebooks for matplotlib and bokeh using pandas.
+- Daily update
+- Daily updates
+- Testing framework with pytest... initial commit
+- Daily updates
+- New script using Holoviews = Bokeh
+- Setting matplotlib as notebook instead of inline makes the plots interactive
+- Re-organised structure and renamed repository
+- Daily update
+- Improved plotting
+- Daily Updates
+- Daily updates...
+- Daily updates..
+- Daily updates..
+- Daily updates..
+- Daily updates...
+- Daily Updates
+- Daily updates...
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily Updates
+- Daily Updates
+- Daily updates
+- Daily updates
+- Daily updates
+- SMA updates
+- Print out SMA totals
+- Add FIXME for incorrect code that needs to be fixed.
+- Fixed use of a pandas dataframe command in a numpy array..
+- Update top level documentation
+- Daily updates
+- Daily updates
+- fixed input path
+- Verbruik Water toegevoegd..
+- Daily updates
+- Daily updates
+- first attempt to get multiple plots in the same figure
+- First attempt to have a full GUI app in Qt5
+- Use the QDarkStyle
+- Working version based on PushButtons and dark style (tag: 1.0)
+- Version that works with tabWidget (tag: 1.1)
+- Added 'per dag' tabs for Gas and Elektriciteit
+- Daily updates
+- Added the matplotlib toolbar at the bottom of the window
+- Daily updates
+- Connect ToolBar to proper FigureCanvas, choose a different color palette for dark mode
+- Daily updates
+- Dialy updates
+- Dialy updates
+- Add a printout of the total solar panel yield for the last 20 days
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- daily update
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- add small paragraph on use of qt5
+- Merge branch 'master' of git@github.com:rhuygen/Meterstanden.git
+- Daily updates
+- Merge remote-tracking branch 'refs/remotes/origin/master'
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Add raw code toggle from Yannis.
+- Daily updates
+- Daily updates
+- Daily updates
+- ignore workspace file from vscode
+- add missing import statement for QtCore
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- daily updates
+- replace default logging with logme
+- daily updates
+- Daily updates
+- Bumped version to 1.0.0
+- Bumped version to 1.0.0
+- daily updates
+- Bumped version to 0.1.0
+
+### Version 0.1.0
+- Simple plotting example for matplotlib in Pythonista
+- Testing interface between Pythonista and Working Copy
+- saved from Pythonista..
+- Testing how to push to GitHub again
+- Added Meterstanden to the Pythonista Repository
+- Moving all sources and plots to GitHub...
+- Moved Javascript Bokeh output files into Dropbox again...
+- Adapted new location of csv file...
+- new data entered
+- Add HoverTool to plot: "Controle op berekening totale SMA"
+- Daily updates to Meterstanden.csv Added and optimised plot for "Controle op berekening totale SMA"
+- daily update
+- daily update
+- daily update
+- add label to last point in sma total check plot
+- Daily updates
+- Merge branch 'master' of git@github.com:rhuygen/Pythonista.git
+- Daily updates
+- Daily updates
+- daily updates
+- daily update
+- Daily updates
+- Check where script is running and correct csv file location accordingly
+- fix unknown variable on_laptop
+- Daily updates
+- Check for Bokeh and Pandas availability
+- Cleanup code and add conditions for iPad and laptop
+- Rename files such that the name tell me which plot library and which numerical library has been used
+- We don't need this example file here
+- Daily update
+- These files were renamed to contain plot and numeric library in filename
+- Python Jupyter notebooks for matplotlib and bokeh using pandas.
+- Daily update
+- Daily updates
+- Testing framework with pytest... initial commit
+- Daily updates
+- New script using Holoviews = Bokeh
+- Setting matplotlib as notebook instead of inline makes the plots interactive
+- Re-organised structure and renamed repository
+- Daily update
+- Improved plotting
+- Daily Updates
+- Daily updates...
+- Daily updates..
+- Daily updates..
+- Daily updates..
+- Daily updates...
+- Daily Updates
+- Daily updates...
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily Updates
+- Daily Updates
+- Daily updates
+- Daily updates
+- Daily updates
+- SMA updates
+- Print out SMA totals
+- Add FIXME for incorrect code that needs to be fixed.
+- Fixed use of a pandas dataframe command in a numpy array..
+- Update top level documentation
+- Daily updates
+- Daily updates
+- fixed input path
+- Verbruik Water toegevoegd..
+- Daily updates
+- Daily updates
+- first attempt to get multiple plots in the same figure
+- First attempt to have a full GUI app in Qt5
+- Use the QDarkStyle
+- Working version based on PushButtons and dark style (tag: 1.0)
+- Version that works with tabWidget (tag: 1.1)
+- Added 'per dag' tabs for Gas and Elektriciteit
+- Daily updates
+- Added the matplotlib toolbar at the bottom of the window
+- Daily updates
+- Connect ToolBar to proper FigureCanvas, choose a different color palette for dark mode
+- Daily updates
+- Dialy updates
+- Dialy updates
+- Add a printout of the total solar panel yield for the last 20 days
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- daily update
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- add small paragraph on use of qt5
+- Merge branch 'master' of git@github.com:rhuygen/Meterstanden.git
+- Daily updates
+- Merge remote-tracking branch 'refs/remotes/origin/master'
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Add raw code toggle from Yannis.
+- Daily updates
+- Daily updates
+- Daily updates
+- ignore workspace file from vscode
+- add missing import statement for QtCore
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- daily updates
+- replace default logging with logme
+- daily updates (origin/master, origin/HEAD)
+- Daily updates
+- Bumped version to 1.0.0
+- Bumped version to 1.0.0
+- daily updates
+
+### Version 1.0.0
+- Simple plotting example for matplotlib in Pythonista
+- Testing interface between Pythonista and Working Copy
+- saved from Pythonista..
+- Testing how to push to GitHub again
+- Added Meterstanden to the Pythonista Repository
+- Moving all sources and plots to GitHub...
+- Moved Javascript Bokeh output files into Dropbox again...
+- Adapted new location of csv file...
+- new data entered
+- Add HoverTool to plot: "Controle op berekening totale SMA"
+- Daily updates to Meterstanden.csv Added and optimised plot for "Controle op berekening totale SMA"
+- daily update
+- daily update
+- daily update
+- add label to last point in sma total check plot
+- Daily updates
+- Merge branch 'master' of git@github.com:rhuygen/Pythonista.git
+- Daily updates
+- Daily updates
+- daily updates
+- daily update
+- Daily updates
+- Check where script is running and correct csv file location accordingly
+- fix unknown variable on_laptop
+- Daily updates
+- Check for Bokeh and Pandas availability
+- Cleanup code and add conditions for iPad and laptop
+- Rename files such that the name tell me which plot library and which numerical library has been used
+- We don't need this example file here
+- Daily update
+- These files were renamed to contain plot and numeric library in filename
+- Python Jupyter notebooks for matplotlib and bokeh using pandas.
+- Daily update
+- Daily updates
+- Testing framework with pytest... initial commit
+- Daily updates
+- New script using Holoviews = Bokeh
+- Setting matplotlib as notebook instead of inline makes the plots interactive
+- Re-organised structure and renamed repository
+- Daily update
+- Improved plotting
+- Daily Updates
+- Daily updates...
+- Daily updates..
+- Daily updates..
+- Daily updates..
+- Daily updates...
+- Daily Updates
+- Daily updates...
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily Updates
+- Daily Updates
+- Daily updates
+- Daily updates
+- Daily updates
+- SMA updates
+- Print out SMA totals
+- Add FIXME for incorrect code that needs to be fixed.
+- Fixed use of a pandas dataframe command in a numpy array..
+- Update top level documentation
+- Daily updates
+- Daily updates
+- fixed input path
+- Verbruik Water toegevoegd..
+- Daily updates
+- Daily updates
+- first attempt to get multiple plots in the same figure
+- First attempt to have a full GUI app in Qt5
+- Use the QDarkStyle
+- Working version based on PushButtons and dark style (tag: 1.0)
+- Version that works with tabWidget (tag: 1.1)
+- Added 'per dag' tabs for Gas and Elektriciteit
+- Daily updates
+- Added the matplotlib toolbar at the bottom of the window
+- Daily updates
+- Connect ToolBar to proper FigureCanvas, choose a different color palette for dark mode
+- Daily updates
+- Dialy updates
+- Dialy updates
+- Add a printout of the total solar panel yield for the last 20 days
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- daily update
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- add small paragraph on use of qt5
+- Merge branch 'master' of git@github.com:rhuygen/Meterstanden.git
+- Daily updates
+- Merge remote-tracking branch 'refs/remotes/origin/master'
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Daily updates
+- Add raw code toggle from Yannis.
+- Daily updates
+- Daily updates
+- Daily updates
+- ignore workspace file from vscode
+- add missing import statement for QtCore
+- Daily updates
+- Daily updates
+- Daily updates
+- daily updates
+- daily updates
+- replace default logging with logme
+- daily updates (origin/master, origin/HEAD)
+- Daily updates
+
