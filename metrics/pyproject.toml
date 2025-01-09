@@ -27,6 +27,7 @@ dependencies = [
     "ipykernel",
     "ipython",
     "requests",
+    "ruamel.yaml",
 ]
 
 [tool.hatch.build.targets.wheel]
