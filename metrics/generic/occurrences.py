@@ -158,8 +158,21 @@ def create_plot(timestamp):
     # FixedFomatter shall be used with FixedLocator, the locations shall be in the units of the axis, i.e. numeric datetime.
     fixed_locations = mdates.date2num(df['date'].unique())
     fixed_labels = df['date'].astype(str).unique().tolist()
-    ax1.xaxis.set_major_locator(FixedLocator(fixed_locations))
-    ax1.xaxis.set_major_formatter(FixedFormatter(fixed_labels))
+
+    # Define the ticks on the bottom x-axis
+
+    # 1. Set fixed x-axis ticks each day (this gets very crowded with many days)
+
+    # ax1.xaxis.set_major_locator(FixedLocator(fixed_locations))
+    # ax1.xaxis.set_major_formatter(FixedFormatter(fixed_labels))
+
+    # 2. Use AutoDateLocator and ConciseDateFormatter for the x-axis with a maximum of 20 ticks
+    
+    locator = mdates.AutoDateLocator(minticks=5, maxticks=20)
+    formatter = mdates.ConciseDateFormatter(locator)
+    ax1.xaxis.set_major_locator(locator)
+    ax1.xaxis.set_major_formatter(formatter)
+
 
     # Add darker background for the 'night' part (e.g., from 22:00 to 08:00)
     night_start = 22 # 22:00 in the evening
