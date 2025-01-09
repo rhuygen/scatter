@@ -202,7 +202,7 @@ def create_plot(timestamp):
     rich.print(f"{timestamp} Creating occurrences plot at {PNG_PATH/PNG_FILE}")
     plt.savefig(PNG_PATH / PNG_FILE)
 
-    # plt.show()
+    plt.close()
 
 
 class MyEventHandler(FileSystemEventHandler):
