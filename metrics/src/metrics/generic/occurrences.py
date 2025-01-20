@@ -258,7 +258,7 @@ def main():
             except queue.Empty:
                 pass
             except KeyboardInterrupt:
-                rich.print(f"Caught a KeyboardInterrupt: Terminating..")
+                rich.print("Caught a KeyboardInterrupt: Terminating..")
                 break
             except Exception as exc:
                 rich.print(f"[red]Caught exception: {exc.__class__.__name__}, {exc}[/]")

@@ -17,11 +17,12 @@ What I try to do here is to make these scripts stand-alone and provide sample da
 
 Use a virtual environment with a Python 3.12:
 
-    $ python -m venv .venv 
+    $ uv venv
 
 Install the dependencies:
 
-    $ pip install -e .
+    $ uv pip sync
+    $ uv pip install -e .
 
 ## Testing the scripts
 
