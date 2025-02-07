@@ -1,11 +1,11 @@
 """
 Keep a record of all occurrences of a specific event during the day.
 
-Create a plot with all occurrences with the date on the x-axis and 
-the hour of the day on the y-axis. The top x-axis represents the total 
+Create a plot with all occurrences with the date on the x-axis and
+the hour of the day on the y-axis. The top x-axis represents the total
 number of occurrences that day.
 
-The script is meant to run in the background. It checks for a FileModifiedEvent for 
+The script is meant to run in the background. It checks for a FileModifiedEvent for
 the file holding the metrics data.
 
 This is a generic script that reads from a YAML file with the following structure:
@@ -27,6 +27,7 @@ Usage:
     $ nohup python scatter/metrics/generic/occurrences.py <YAML path> 1> ~/occurrences.log 2>&1 &
 
 """
+
 from pathlib import Path
 import time
 import datetime
@@ -47,13 +48,13 @@ import matplotlib.dates as mdates
 from matplotlib.ticker import FixedLocator, FixedFormatter, MultipleLocator
 
 HERE = Path(__file__).parent
-YAML_PATH = HERE / 'occurrences.yaml'
+YAML_PATH = HERE / "occurrences.yaml"
 
 # The following variables will be overwritten with entries from the YAML file.
 
 WATCH_PATH = HERE
 PNG_PATH = HERE
-PNG_FILE = 'occurrences.png'
+PNG_FILE = "occurrences.png"
 
 FIG_TITLE = "Event occurrences during the day"
 TOP_AXIS_LABEL = "Occurrences in the day"
@@ -62,19 +63,19 @@ TOP_AXIS_LABEL = "Occurrences in the day"
 def set_fig_title(data: dict):
     global FIG_TITLE
 
-    FIG_TITLE = data.get('title', FIG_TITLE)
+    FIG_TITLE = data.get("title", FIG_TITLE)
 
 
 def set_top_axis_label(data: dict):
     global TOP_AXIS_LABEL
 
-    TOP_AXIS_LABEL = data.get('top_axis_label', TOP_AXIS_LABEL)
+    TOP_AXIS_LABEL = data.get("top_axis_label", TOP_AXIS_LABEL)
 
 
 def set_watch_path(data: dict):
     global WATCH_PATH
 
-    watch_path = data.get('watch_path', '__here__')
+    watch_path = data.get("watch_path", "__here__")
 
     if watch_path == "__here__":
         WATCH_PATH = YAML_PATH.parent
@@ -85,7 +86,7 @@ def set_watch_path(data: dict):
 def set_png_path(data: dict):
     global PNG_PATH
 
-    png_path = data.get('png_path', '__here__')
+    png_path = data.get("png_path", "__here__")
 
     if png_path == "__here__":
         PNG_PATH = YAML_PATH.parent
@@ -96,7 +97,7 @@ def set_png_path(data: dict):
 def set_png_file(data: dict):
     global PNG_FILE
 
-    PNG_FILE = data.get('png_file', PNG_FILE)
+    PNG_FILE = data.get("png_file", PNG_FILE)
 
 
 def set_global_variables(data: dict):
@@ -114,15 +115,23 @@ def set_global_variables(data: dict):
     #     'FIG_TITLE': FIG_TITLE,
     # })
 
+
 def read_data():
     with open(YAML_PATH) as fd:
-        yaml_file = yaml.YAML(typ='safe')
+        yaml_file = yaml.YAML(typ="safe")
         data = yaml_file.load(fd)
 
     set_global_variables(data)
 
     # Convert the data to a pandas DataFrame
-    df = pd.DataFrame([(date, time) for date, times_list in data['data'].items() for time in times_list], columns=['date', 'time'])
+    df = pd.DataFrame(
+        [
+            (date, time)
+            for date, times_list in data["data"].items()
+            for time in times_list
+        ],
+        columns=["date", "time"],
+    )
 
     return df
 
@@ -135,29 +144,28 @@ def create_plot(timestamp):
         return
 
     # Convert date and time columns to datetime
-    df['date'] = pd.to_datetime(df['date'])
-    df['time'] = pd.to_datetime(df['time'], format='%H:%M').dt.time
+    df["date"] = pd.to_datetime(df["date"])
+    df["time"] = pd.to_datetime(df["time"], format="%H:%M").dt.time
 
     # Convert datetime objects to numerical values
-    df['date_numeric'] = mdates.date2num(df['date'])
+    df["date_numeric"] = mdates.date2num(df["date"])
 
     # Convert time to a numeric format (minutes since midnight)
-    df['time_numeric'] = df['time'].apply(lambda x: x.hour * 60 + x.minute) / 60.0
+    df["time_numeric"] = df["time"].apply(lambda x: x.hour * 60 + x.minute) / 60.0
 
     # Plot occurrences
     fig, ax1 = plt.subplots(figsize=(10, 6))
 
-    ax1.scatter(df['date_numeric'], df['time_numeric'], color='blue')
-    ax1.set_xlabel('Date')
-    ax1.set_ylabel('Time (hour)')
+    ax1.scatter(df["date_numeric"], df["time_numeric"], color="blue")
+    ax1.set_xlabel("Date")
+    ax1.set_ylabel("Time (hour)")
     ax1.set_title(FIG_TITLE, fontsize=16, pad=20)
     ax1.grid(True)
     # ax1.yaxis.grid(which='minor', color='whitesmoke', linestyle='-', linewidth=1)
 
-
     # FixedFomatter shall be used with FixedLocator, the locations shall be in the units of the axis, i.e. numeric datetime.
-    fixed_locations = mdates.date2num(df['date'].unique())
-    fixed_labels = df['date'].astype(str).unique().tolist()
+    fixed_locations = mdates.date2num(df["date"].unique())
+    fixed_labels = df["date"].astype(str).unique().tolist()
 
     # Define the ticks on the bottom x-axis
 
@@ -167,19 +175,22 @@ def create_plot(timestamp):
     # ax1.xaxis.set_major_formatter(FixedFormatter(fixed_labels))
 
     # 2. Use AutoDateLocator and ConciseDateFormatter for the x-axis with a maximum of 20 ticks
-    
+
     locator = mdates.AutoDateLocator(minticks=5, maxticks=20)
     formatter = mdates.ConciseDateFormatter(locator)
     ax1.xaxis.set_major_locator(locator)
     ax1.xaxis.set_major_formatter(formatter)
 
-
     # Add darker background for the 'night' part (e.g., from 22:00 to 08:00)
-    night_start = 22 # 22:00 in the evening
-    night_end = 8    # 08:00 in the morning
+    night_start = 22  # 22:00 in the evening
+    night_end = 8  # 08:00 in the morning
 
-    ax1.axhspan(night_start, 24, facecolor='gray', alpha=0.3)  # Night from 18:00 to midnight
-    ax1.axhspan(0, night_end, facecolor='gray', alpha=0.3)          # Night from midnight to 06:00
+    ax1.axhspan(
+        night_start, 24, facecolor="gray", alpha=0.3
+    )  # Night from 18:00 to midnight
+    ax1.axhspan(
+        0, night_end, facecolor="gray", alpha=0.3
+    )  # Night from midnight to 06:00
 
     # Set y-axis limits from 0 to 24 hours
     ax1.set_ylim(0, 24)
@@ -188,8 +199,8 @@ def create_plot(timestamp):
     # y_ticks = [0, 8, 12, 18, 22, 24]
     # y_tick_labels = ['0', '8', '12', '18', '22', '24']
     y_ticks = [0, 4, 8, 12, 16, 20, 24]
-    y_tick_labels = ['0', '4', '8', '12', '16', '20', '24']
-    #plt.yticks(y_ticks, y_tick_labels)
+    y_tick_labels = ["0", "4", "8", "12", "16", "20", "24"]
+    # plt.yticks(y_ticks, y_tick_labels)
 
     ax1.yaxis.set_major_locator(FixedLocator(y_ticks))
     ax1.yaxis.set_major_formatter(FixedFormatter(y_tick_labels))
@@ -197,7 +208,7 @@ def create_plot(timestamp):
     ax1.yaxis.set_minor_locator(FixedLocator(range(24)))
 
     # Calculate total occurrences per day
-    occurrences_per_day = df['date'].value_counts().sort_index()
+    occurrences_per_day = df["date"].value_counts().sort_index()
 
     # Add a second x-axis at the top with the occurrence per day as major ticks
     ax2 = ax1.twiny()
@@ -205,14 +216,22 @@ def create_plot(timestamp):
     ax2.set_xticks(fixed_locations)
     ax2.set_xticklabels(occurrences_per_day.values)
 
-    # Increase font size for the major ticks
-    ax2.tick_params(axis='x', which='major', labelsize=14)
+    # Set font size for the major ticks
+    ax2.tick_params(axis="x", which="major", labelsize=10)
+
+    # An alternative way to set the fontsize for each major tick label individually.
+    #
+    # for tick in ax2.xaxis.get_major_ticks():
+    #     # specify integer or one of preset strings, e.g. small, x-small, ...
+    #     tick.label2.set_fontsize(10)
+    #     # tick.label2.set_fontsize("small")
+    #     tick.label2.set_rotation("horizontal")
 
     ax2.set_xlabel(TOP_AXIS_LABEL)
 
     plt.tight_layout()
 
-    rich.print(f"{timestamp} Creating occurrences plot at {PNG_PATH/PNG_FILE}")
+    rich.print(f"{timestamp} Creating occurrences plot at {PNG_PATH / PNG_FILE}")
     plt.savefig(PNG_PATH / PNG_FILE)
 
     plt.close()
@@ -231,7 +250,12 @@ class MyEventHandler(FileSystemEventHandler):
                 if time.time() - self.last_occurrence > 5.0:
                     self.last_occurrence = time.time()
                     # rich.print(datetime.datetime.fromtimestamp(self.last_occurrence), event)
-                    self.trigger.put((datetime.datetime.fromtimestamp(self.last_occurrence), event.src_path))
+                    self.trigger.put(
+                        (
+                            datetime.datetime.fromtimestamp(self.last_occurrence),
+                            event.src_path,
+                        )
+                    )
 
 
 def main():
@@ -265,6 +289,7 @@ def main():
     finally:
         observer.stop()
         observer.join()
+
 
 if __name__ == "__main__":
     main()
