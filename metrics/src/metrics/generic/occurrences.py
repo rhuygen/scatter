@@ -154,7 +154,10 @@ def create_plot(timestamp):
     df["time_numeric"] = df["time"].apply(lambda x: x.hour * 60 + x.minute) / 60.0
 
     # Plot occurrences
-    fig, ax1 = plt.subplots(figsize=(10, 6))
+    # fig, ax1 = plt.subplots(figsize=(10, 6))
+    fig, (ax3, ax1) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [1, 4]}, sharex=True, figsize=(10, 8))
+
+    fig.suptitle(FIG_TITLE, fontsize=16)
 
     # FixedFomatter shall be used with FixedLocator, the locations shall be in the units of the axis, i.e. numeric datetime.
     fixed_locations = mdates.date2num(df["date"].unique())
@@ -163,22 +166,30 @@ def create_plot(timestamp):
     # Calculate total occurrences per day
     occurrences_per_day = df["date"].value_counts().sort_index()
 
-    # Create a secondary y-axis
-    ax3 = ax1.twinx()
-    ax3.set_ylabel("Aantal keer per dag")
+    ax3.plot(
+        fixed_locations, occurrences_per_day, color="blue", alpha=0.4, linestyle='-', marker='.', markersize=7, label="Counts"
+    )
+
+    ax3.set_ylabel("Aantal")
     ax3.set_ylim(0, 20)
 
-    # Ensure the secondary y-axis has integer labels
-    ax3.yaxis.set_major_locator(MaxNLocator(integer=True))
+    y_ticks = [0, 5, 10, 15, 20]
+    y_tick_labels = ['0', '5', '10', '15', '20']
 
-    ax3.plot(
-        fixed_locations, occurrences_per_day, color="blue", alpha=0.5, linestyle='-', label="Counts"
-    )
+    ax3.yaxis.set_major_locator(FixedLocator(y_ticks))
+    ax3.yaxis.set_major_formatter(FixedFormatter(y_tick_labels))
+
+    ax3.yaxis.set_minor_locator(FixedLocator(range(20)))
+
+    # Remove ticks from the bottom x-axis
+    ax3.tick_params(axis='x', which='both', bottom=False, top=False, length=0, labelbottom=False)
+
+    ax3.grid(True)
+
 
     ax1.scatter(df["date_numeric"], df["time_numeric"], color="blue")
     ax1.set_xlabel("Date")
     ax1.set_ylabel("Time (hour)")
-    ax1.set_title(FIG_TITLE, fontsize=16, pad=20)
     ax1.grid(True)
     # ax1.yaxis.grid(which='minor', color='whitesmoke', linestyle='-', linewidth=1)
 
@@ -211,8 +222,6 @@ def create_plot(timestamp):
     ax1.set_ylim(0, 24)
 
     # Set fixed y-axis ticks at [0, 8, 12, 18, 22, 24] hours
-    # y_ticks = [0, 8, 12, 18, 22, 24]
-    # y_tick_labels = ['0', '8', '12', '18', '22', '24']
     y_ticks = [0, 4, 8, 12, 16, 20, 24]
     y_tick_labels = ["0", "4", "8", "12", "16", "20", "24"]
     # plt.yticks(y_ticks, y_tick_labels)
@@ -223,8 +232,8 @@ def create_plot(timestamp):
     ax1.yaxis.set_minor_locator(FixedLocator(range(24)))
 
     # Add a second x-axis at the top with the occurrence per day as major ticks
-    ax2 = ax1.twiny()
-    ax2.set_xlim(ax1.get_xlim())
+    ax2 = ax3.twiny()
+    ax2.set_xlim(ax3.get_xlim())
     ax2.set_xticks(fixed_locations)
     ax2.set_xticklabels(occurrences_per_day.values)
 
@@ -241,7 +250,7 @@ def create_plot(timestamp):
 
     ax2.set_xlabel(TOP_AXIS_LABEL)
 
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 1])
 
     rich.print(f"{timestamp} Creating occurrences plot at {PNG_PATH / PNG_FILE}")
     plt.savefig(PNG_PATH / PNG_FILE)
