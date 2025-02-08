@@ -45,7 +45,7 @@ from ruamel import yaml
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from matplotlib.ticker import FixedLocator, FixedFormatter, MultipleLocator
+from matplotlib.ticker import FixedLocator, FixedFormatter, MultipleLocator, MaxNLocator
 
 HERE = Path(__file__).parent
 YAML_PATH = HERE / "occurrences.yaml"
@@ -156,16 +156,31 @@ def create_plot(timestamp):
     # Plot occurrences
     fig, ax1 = plt.subplots(figsize=(10, 6))
 
+    # FixedFomatter shall be used with FixedLocator, the locations shall be in the units of the axis, i.e. numeric datetime.
+    fixed_locations = mdates.date2num(df["date"].unique())
+    fixed_labels = df["date"].astype(str).unique().tolist()
+
+    # Calculate total occurrences per day
+    occurrences_per_day = df["date"].value_counts().sort_index()
+
+    # Create a secondary y-axis
+    ax3 = ax1.twinx()
+    ax3.set_ylabel("Aantal keer per dag")
+    ax3.set_ylim(0, 20)
+
+    # Ensure the secondary y-axis has integer labels
+    ax3.yaxis.set_major_locator(MaxNLocator(integer=True))
+
+    ax3.plot(
+        fixed_locations, occurrences_per_day, color="blue", alpha=0.5, linestyle='-', label="Counts"
+    )
+
     ax1.scatter(df["date_numeric"], df["time_numeric"], color="blue")
     ax1.set_xlabel("Date")
     ax1.set_ylabel("Time (hour)")
     ax1.set_title(FIG_TITLE, fontsize=16, pad=20)
     ax1.grid(True)
     # ax1.yaxis.grid(which='minor', color='whitesmoke', linestyle='-', linewidth=1)
-
-    # FixedFomatter shall be used with FixedLocator, the locations shall be in the units of the axis, i.e. numeric datetime.
-    fixed_locations = mdates.date2num(df["date"].unique())
-    fixed_labels = df["date"].astype(str).unique().tolist()
 
     # Define the ticks on the bottom x-axis
 
@@ -206,9 +221,6 @@ def create_plot(timestamp):
     ax1.yaxis.set_major_formatter(FixedFormatter(y_tick_labels))
 
     ax1.yaxis.set_minor_locator(FixedLocator(range(24)))
-
-    # Calculate total occurrences per day
-    occurrences_per_day = df["date"].value_counts().sort_index()
 
     # Add a second x-axis at the top with the occurrence per day as major ticks
     ax2 = ax1.twiny()
