@@ -155,7 +155,7 @@ def create_plot(timestamp):
 
     # Plot occurrences
     # fig, ax1 = plt.subplots(figsize=(10, 6))
-    fig, (ax3, ax1) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [1, 4]}, sharex=True, figsize=(10, 8))
+    fig, (ax3, ax1) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [2, 4]}, sharex=True, figsize=(12, 8))
 
     fig.suptitle(FIG_TITLE, fontsize=16)
 
@@ -186,6 +186,16 @@ def create_plot(timestamp):
 
     ax3.grid(True)
 
+    ax4 = ax3.twinx()
+
+    def format_seondary_yaxis():
+        ax4.set_ylim(0, 20)
+        ax4.set_yticks([0, 5, 10, 15, 20])
+        ax4.set_yticklabels(["0", "5", "10", "15", "20"])
+        ax4.set_ylabel("Aantal")
+        
+
+    format_seondary_yaxis()
 
     ax1.scatter(df["date_numeric"], df["time_numeric"], color="blue")
     ax1.set_xlabel("Date")
@@ -231,24 +241,36 @@ def create_plot(timestamp):
 
     ax1.yaxis.set_minor_locator(FixedLocator(range(24)))
 
-    # Add a second x-axis at the top with the occurrence per day as major ticks
-    ax2 = ax3.twiny()
-    ax2.set_xlim(ax3.get_xlim())
-    ax2.set_xticks(fixed_locations)
-    ax2.set_xticklabels(occurrences_per_day.values)
+    # Create a secondary y-axis that shares the same x-axis
+    ax2 = ax1.twinx()
 
-    # Set font size for the major ticks
-    ax2.tick_params(axis="x", which="major", labelsize=10)
+    def format_seondary_yaxis():
+        ax2.set_ylim(0, 24)
+        ax2.set_yticks([0, 4, 8, 12, 16, 20, 24])
+        ax2.set_yticklabels(["0", "4", "8", "12", "16", "20", "24"])
+        ax2.set_ylabel("Time (hour)")
+    
+    format_seondary_yaxis()
 
-    # An alternative way to set the fontsize for each major tick label individually.
-    #
-    # for tick in ax2.xaxis.get_major_ticks():
-    #     # specify integer or one of preset strings, e.g. small, x-small, ...
-    #     tick.label2.set_fontsize(10)
-    #     # tick.label2.set_fontsize("small")
-    #     tick.label2.set_rotation("horizontal")
+    if not "do we need a top axis?":
+        # Add a second x-axis at the top with the occurrence per day as major ticks
+        ax2 = ax3.twiny()
+        ax2.set_xlim(ax3.get_xlim())
+        ax2.set_xticks(fixed_locations)
+        ax2.set_xticklabels(occurrences_per_day.values)
 
-    ax2.set_xlabel(TOP_AXIS_LABEL)
+        # Set font size for the major ticks
+        ax2.tick_params(axis="x", which="major", labelsize=10)
+
+        # An alternative way to set the fontsize for each major tick label individually.
+        #
+        # for tick in ax2.xaxis.get_major_ticks():
+        #     # specify integer or one of preset strings, e.g. small, x-small, ...
+        #     tick.label2.set_fontsize(10)
+        #     # tick.label2.set_fontsize("small")
+        #     tick.label2.set_rotation("horizontal")
+
+        ax2.set_xlabel(TOP_AXIS_LABEL)
 
     plt.tight_layout(rect=[0, 0, 1, 1])
 
