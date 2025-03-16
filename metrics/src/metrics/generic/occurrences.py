@@ -193,7 +193,8 @@ def create_plot(timestamp):
         ax4.set_yticks([0, 5, 10, 15, 20])
         ax4.set_yticklabels(["0", "5", "10", "15", "20"])
         ax4.set_ylabel("Aantal")
-        
+        ax4.yaxis.set_minor_locator(FixedLocator(range(20)))
+    
 
     format_seondary_yaxis()
 
@@ -249,6 +250,7 @@ def create_plot(timestamp):
         ax2.set_yticks([0, 4, 8, 12, 16, 20, 24])
         ax2.set_yticklabels(["0", "4", "8", "12", "16", "20", "24"])
         ax2.set_ylabel("Time (hour)")
+        ax2.yaxis.set_minor_locator(FixedLocator(range(24)))
     
     format_seondary_yaxis()
 
