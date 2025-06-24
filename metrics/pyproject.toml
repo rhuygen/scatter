@@ -24,6 +24,7 @@ dependencies = [
     "ipython",
     "requests",
     "ruamel.yaml",
+    "typer",
 ]
 
 [project.scripts]
