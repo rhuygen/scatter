@@ -31,7 +31,6 @@ Usage:
 from pathlib import Path
 import time
 import datetime
-import sys
 import rich
 import queue
 
@@ -49,7 +48,7 @@ from ruamel.yaml.scanner import ScannerError
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from matplotlib.ticker import FixedLocator, FixedFormatter, MultipleLocator, MaxNLocator
+from matplotlib.ticker import FixedLocator, FixedFormatter
 
 HERE = Path(__file__).parent
 # YAML_PATH = HERE / "occurrences.yaml"
