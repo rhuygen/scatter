@@ -155,6 +155,42 @@ def parse_time_with_color(time_str):
     return clean_time, is_red
 
 
+def annotate_antibiotic_treatment(
+    ax, start_date, end_date, start_y, end_y, start_label, end_label
+):
+    """Annotate the plot with antibiotic treatment periods."""
+    start_date_num = mdates.date2num(start_date)
+    end_date_num = mdates.date2num(end_date)
+
+    ax.annotate(
+        start_label,
+        xy=(start_date_num, start_y),
+        xytext=(start_date_num, start_y + 3),
+        # ha="left",  # Align text to left so arrow starts from beginning of text
+        # va="bottom",  # Align text bottom to the xytext point
+        arrowprops=dict(
+            arrowstyle="->",
+            color="black",
+            relpos=(0, 0),
+            connectionstyle="arc3,rad=0",  # Straight line (no curve)
+        ),
+    )
+
+    ax.annotate(
+        end_label,
+        xy=(end_date_num, end_y),
+        xytext=(end_date_num, end_y - 3),
+        ha="right",  # Align text to left so arrow starts from beginning of text
+        # va="bottom",  # Align text bottom to the xytext point
+        arrowprops=dict(
+            arrowstyle="->",
+            color="black",
+            relpos=(1, 1),
+            connectionstyle="arc3,rad=0",  # Straight line (no curve)
+        ),
+    )
+
+
 def create_plot(timestamp, yaml_file):
     try:
         df = read_data(yaml_file)
@@ -180,7 +216,7 @@ def create_plot(timestamp, yaml_file):
     # Plot occurrences
     # fig, ax1 = plt.subplots(figsize=(10, 6))
     fig, (ax3, ax1) = plt.subplots(
-        2, 1, gridspec_kw={"height_ratios": [2, 4]}, sharex=True, figsize=(12, 8)
+        2, 1, gridspec_kw={"height_ratios": [4, 4]}, sharex=True, figsize=(12, 8)
     )
 
     fig.suptitle(FIG_TITLE, fontsize=16)
@@ -216,12 +252,42 @@ def create_plot(timestamp, yaml_file):
     )
 
     ax3.text(
-        0.20,
-        0.65,
+        0.10,
+        0.90,
         f"Running mean (w={window_days})",
         transform=ax3.transAxes,
         verticalalignment="top",
         bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.8),
+    )
+
+    annotate_antibiotic_treatment(
+        ax3,
+        datetime.datetime(2025, 1, 27),
+        datetime.datetime(2025, 2, 10),
+        start_y=10,
+        end_y=4,
+        start_label="start antibiotica (ciprofloxacine)",
+        end_label="stop antibiotica",
+    )
+
+    annotate_antibiotic_treatment(
+        ax3,
+        datetime.datetime(2025, 3, 17),
+        datetime.datetime(2025, 3, 24),
+        start_y=8,
+        end_y=4,
+        start_label="start antibiotica (Flagyl)",
+        end_label="stop antibiotica",
+    )
+
+    annotate_antibiotic_treatment(
+        ax3,
+        datetime.datetime(2025, 6, 23),
+        datetime.datetime(2025, 7, 7),
+        start_y=11,
+        end_y=4,
+        start_label="start antibiotica\n(ciprofloxacine)",
+        end_label="stop antibiotica",
     )
 
     ax3.set_ylabel("Aantal")
