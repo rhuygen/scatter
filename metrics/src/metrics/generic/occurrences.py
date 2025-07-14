@@ -45,6 +45,7 @@ import typer
 
 import pandas as pd
 from ruamel import yaml
+from ruamel.yaml.scanner import ScannerError
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -155,6 +156,14 @@ def parse_time_with_color(time_str):
     return clean_time, is_red
 
 
+def format_seondary_yaxis(ax, yticks, yticks_lim, ytick_labels, ylabel):
+    ax.set_ylim(*yticks_lim)
+    ax.set_yticks(yticks)
+    ax.set_yticklabels(ytick_labels)
+    ax.set_ylabel(ylabel)
+    ax.yaxis.set_minor_locator(FixedLocator(range(yticks_lim[1])))
+
+
 def annotate_antibiotic_treatment(
     ax, start_date, end_date, start_y, end_y, start_label, end_label
 ):
@@ -194,7 +203,7 @@ def annotate_antibiotic_treatment(
 def create_plot(timestamp, yaml_file):
     try:
         df = read_data(yaml_file)
-    except yaml.scanner.ScannerError:
+    except ScannerError:
         rich.print(f"[red]ERROR: Error while scanning {yaml_file}[/]")
         return
 
@@ -290,16 +299,16 @@ def create_plot(timestamp, yaml_file):
         end_label="stop antibiotica",
     )
 
-    ax3.set_ylabel("Aantal")
-    ax3.set_ylim(0, 20)
-
     y_ticks = [0, 5, 10, 15, 20]
-    y_tick_labels = ["0", "5", "10", "15", "20"]
+    y_ticks_labels = [str(x) for x in y_ticks]
+    y_ticks_lim = (0, 20)
+    y_label = "Aantal"
 
+    ax3.set_ylabel(y_label)
+    ax3.set_ylim(*y_ticks_lim)
     ax3.yaxis.set_major_locator(FixedLocator(y_ticks))
-    ax3.yaxis.set_major_formatter(FixedFormatter(y_tick_labels))
-
-    ax3.yaxis.set_minor_locator(FixedLocator(range(20)))
+    ax3.yaxis.set_major_formatter(FixedFormatter(y_ticks_labels))
+    ax3.yaxis.set_minor_locator(FixedLocator(range(y_ticks_lim[1])))
 
     # Remove ticks from the bottom x-axis
     ax3.tick_params(
@@ -310,14 +319,13 @@ def create_plot(timestamp, yaml_file):
 
     ax4 = ax3.twinx()
 
-    def format_seondary_yaxis():
-        ax4.set_ylim(0, 20)
-        ax4.set_yticks([0, 5, 10, 15, 20])
-        ax4.set_yticklabels(["0", "5", "10", "15", "20"])
-        ax4.set_ylabel("Aantal")
-        ax4.yaxis.set_minor_locator(FixedLocator(range(20)))
-
-    format_seondary_yaxis()
+    format_seondary_yaxis(
+        ax4,
+        yticks=y_ticks,
+        yticks_lim=y_ticks_lim,
+        ytick_labels=y_ticks_labels,
+        ylabel=y_label,
+    )
 
     # ax1.scatter(df["date_numeric"], df["time_numeric"], color="blue", s=5)
 
@@ -371,13 +379,14 @@ def create_plot(timestamp, yaml_file):
         0, night_end, facecolor="gray", alpha=0.3
     )  # Night from midnight to 06:00
 
-    # Set y-axis limits from 0 to 24 hours
-    ax1.set_ylim(0, 24)
-
     # Set fixed y-axis ticks at [0, 8, 12, 18, 22, 24] hours
+    y_ticks_lim = (0, 24)
     y_ticks = [0, 4, 8, 12, 16, 20, 24]
-    y_tick_labels = ["0", "4", "8", "12", "16", "20", "24"]
+    y_tick_labels = [str(x) for x in y_ticks]
     # plt.yticks(y_ticks, y_tick_labels)
+
+    # Set y-axis limits from 0 to 24 hours
+    ax1.set_ylim(*y_ticks_lim)
 
     ax1.yaxis.set_major_locator(FixedLocator(y_ticks))
     ax1.yaxis.set_major_formatter(FixedFormatter(y_tick_labels))
@@ -387,14 +396,13 @@ def create_plot(timestamp, yaml_file):
     # Create a secondary y-axis that shares the same x-axis
     ax2 = ax1.twinx()
 
-    def format_seondary_yaxis():
-        ax2.set_ylim(0, 24)
-        ax2.set_yticks([0, 4, 8, 12, 16, 20, 24])
-        ax2.set_yticklabels(["0", "4", "8", "12", "16", "20", "24"])
-        ax2.set_ylabel("Time (hour)")
-        ax2.yaxis.set_minor_locator(FixedLocator(range(24)))
-
-    format_seondary_yaxis()
+    format_seondary_yaxis(
+        ax2,
+        yticks=y_ticks,
+        yticks_lim=y_ticks_lim,
+        ytick_labels=y_tick_labels,
+        ylabel="Time (hour)",
+    )
 
     if not "do we need a top axis?":
         # Add a second x-axis at the top with the occurrence per day as major ticks
@@ -416,7 +424,7 @@ def create_plot(timestamp, yaml_file):
 
         ax2.set_xlabel(TOP_AXIS_LABEL)
 
-    plt.tight_layout(rect=[0, 0, 1, 1])
+    plt.tight_layout(rect=(0, 0, 1, 1))
 
     rich.print(f"{timestamp} Creating occurrences plot at {PNG_PATH / PNG_FILE}")
     plt.savefig(PNG_PATH / PNG_FILE)
@@ -433,7 +441,7 @@ class MyEventHandler(FileSystemEventHandler):
     def on_any_event(self, event: FileSystemEvent) -> None:
         if isinstance(event, FileModifiedEvent):
             # rich.print(f"{event.src_path = }, {self.watch_file = }")
-            if event.src_path.endswith(self.watch_file):
+            if str(event.src_path).endswith(self.watch_file):
                 if time.time() - self.last_occurrence > 5.0:
                     self.last_occurrence = time.time()
                     # rich.print(datetime.datetime.fromtimestamp(self.last_occurrence), event)
@@ -456,31 +464,29 @@ def main(yaml_file: str):
 
     # First time run, create the plot
 
-    yaml_file = Path(yaml_file)
+    yaml_file_path = Path(yaml_file)
 
-    create_plot(datetime.datetime.now(), yaml_file)
+    create_plot(datetime.datetime.now(), yaml_file_path)
 
     trigger_queue = queue.Queue()
 
-    event_handler = MyEventHandler(yaml_file=yaml_file, trigger=trigger_queue)
+    event_handler = MyEventHandler(yaml_file=yaml_file_path, trigger=trigger_queue)
     observer = Observer()
-    observer.schedule(event_handler, WATCH_PATH, recursive=False)
+    observer.schedule(event_handler, str(WATCH_PATH), recursive=False)
     observer.start()
 
     try:
         while True:
             try:
                 timestamp, src_path = trigger_queue.get(timeout=1)
-                create_plot(timestamp, yaml_file)
+                create_plot(timestamp, yaml_file_path)
             except queue.Empty:
                 pass
             except KeyboardInterrupt:
                 rich.print("Caught a KeyboardInterrupt: Terminating..")
                 break
             except Exception as exc:
-                from rich.traceback import Trace
-
-                rich.print(f"[red]Caught exception: {exc.__class__.__name__}, {exc}[/]")
+                rich.print(f"[red]Caught exception: {type(exc).__name__}, {exc}[/]")
                 console.print_exception(show_locals=True)
     finally:
         observer.stop()
