@@ -142,17 +142,41 @@ def read_data(yaml_file):
 
 def parse_time_with_color(time_str):
     """Parse time string and return time and color indicator"""
-    if time_str.lower().endswith("r"):
-        # Remove 'R' and parse time
-        clean_time = time_str[:-1]
-        is_red = True
-    else:
-        clean_time = time_str
-        is_red = False
+    # if time_str.lower().endswith("r"):
+    #     # Remove 'R'
+    #     clean_time = time_str[:-1]
+    #     is_red = True
+    #     is_black = False
+    # elif time_str.lower().endswith("z"):
+    #     # Remove 'Z'
+    #     clean_time = time_str[:-1]
+    #     is_red = False
+    #     is_black = True
+    # else:
+    #     clean_time = time_str
+    #     is_red = False
+    #     is_black = False
+
+    match time_str.lower()[-1:]:  # [-1:] handles empty strings safely
+        case "r":
+            clean_time = time_str[:-1]
+            is_red, is_black = True, False
+        case "z":
+            clean_time = time_str[:-1]
+            is_red, is_black = False, True
+        case "d":  # not handled yet...
+            clean_time = time_str[:-1]
+            is_red, is_black = False, False
+        case _:
+            clean_time = time_str
+            is_red, is_black = False, False
 
     # Convert to datetime for plotting - done later
     # time_obj = datetime.datetime.strptime(clean_time, "%H:%M").time()
-    return clean_time, is_red
+    return clean_time, is_red, is_black
+
+    # Don't use the colors (for now)
+    # return clean_time, False, False
 
 
 def format_seondary_yaxis(ax, yticks, yticks_lim, ytick_labels, ylabel):
@@ -163,40 +187,62 @@ def format_seondary_yaxis(ax, yticks, yticks_lim, ytick_labels, ylabel):
     ax.yaxis.set_minor_locator(FixedLocator(range(yticks_lim[1])))
 
 
+def anntotate_entyvio(ax, date, y, label):
+    """Annotate the plot with Entyvio treatment periods."""
+    if date:
+        date_num = mdates.date2num(date)
+        ax.annotate(
+            label,
+            xy=(date_num, y),
+            xytext=(date_num, y + 2),
+            color="blue",
+            ha="center",  # Align text to center
+            va="bottom",  # Align text bottom to the xytext point
+            arrowprops=dict(
+                arrowstyle="->",
+                color="blue",
+                relpos=(0.5, 0),  # Center the arrow
+                connectionstyle="arc3,rad=0",  # Straight line (no curve)
+            ),
+        )
+
+
 def annotate_antibiotic_treatment(
     ax, start_date, end_date, start_y, end_y, start_label, end_label
 ):
     """Annotate the plot with antibiotic treatment periods."""
-    start_date_num = mdates.date2num(start_date)
-    end_date_num = mdates.date2num(end_date)
+    if start_date:
+        start_date_num = mdates.date2num(start_date)
+        ax.annotate(
+            start_label,
+            xy=(start_date_num, start_y),
+            xytext=(start_date_num, start_y + 3),
+            # ha="left",  # Align text to left so arrow starts from beginning of text
+            # va="bottom",  # Align text bottom to the xytext point
+            arrowprops=dict(
+                arrowstyle="->",
+                color="black",
+                relpos=(0, 0),
+                connectionstyle="arc3,rad=0",  # Straight line (no curve)
+            ),
+        )
 
-    ax.annotate(
-        start_label,
-        xy=(start_date_num, start_y),
-        xytext=(start_date_num, start_y + 3),
-        # ha="left",  # Align text to left so arrow starts from beginning of text
-        # va="bottom",  # Align text bottom to the xytext point
-        arrowprops=dict(
-            arrowstyle="->",
-            color="black",
-            relpos=(0, 0),
-            connectionstyle="arc3,rad=0",  # Straight line (no curve)
-        ),
-    )
-
-    ax.annotate(
-        end_label,
-        xy=(end_date_num, end_y),
-        xytext=(end_date_num, end_y - 3),
-        ha="right",  # Align text to left so arrow starts from beginning of text
-        # va="bottom",  # Align text bottom to the xytext point
-        arrowprops=dict(
-            arrowstyle="->",
-            color="black",
-            relpos=(1, 1),
-            connectionstyle="arc3,rad=0",  # Straight line (no curve)
-        ),
-    )
+    if end_date:
+        # Convert end_date to numerical format
+        end_date_num = mdates.date2num(end_date)
+        ax.annotate(
+            end_label,
+            xy=(end_date_num, end_y),
+            xytext=(end_date_num, end_y - 3),
+            ha="right",  # Align text to left so arrow starts from beginning of text
+            # va="bottom",  # Align text bottom to the xytext point
+            arrowprops=dict(
+                arrowstyle="->",
+                color="black",
+                relpos=(1, 1),
+                connectionstyle="arc3,rad=0",  # Straight line (no curve)
+            ),
+        )
 
 
 def create_plot(timestamp, yaml_file):
@@ -209,7 +255,7 @@ def create_plot(timestamp, yaml_file):
     # Convert date and time columns to datetime
     df["date"] = pd.to_datetime(df["date"])
 
-    df[["time", "is_red"]] = df["time"].apply(
+    df[["time", "is_red", "is_black"]] = df["time"].apply(
         lambda x: pd.Series(parse_time_with_color(x))
     )
 
@@ -298,6 +344,29 @@ def create_plot(timestamp, yaml_file):
         end_label="stop antibiotica",
     )
 
+    annotate_antibiotic_treatment(
+        ax3,
+        datetime.datetime(2025, 7, 28),
+        datetime.datetime(2025, 8, 15),
+        start_y=11,
+        end_y=4,
+        start_label="start antibiotica\n(ciprofloxacine)",
+        end_label="stop antibiotica",
+    )
+
+    for date, msg in (
+        (datetime.datetime(2025, 8, 1), "Entyvio 0"),
+        (datetime.datetime(2025, 8, 14), "+2"),
+        # (datetime.datetime(2025, 9, 11), "+6"),
+        # (datetime.datetime(2025, 11, 6), "+8"),
+    ):
+        anntotate_entyvio(
+            ax3,
+            date,
+            y=16,
+            label=f"{msg}",
+        )
+
     y_ticks = [0, 5, 10, 15, 20]
     y_ticks_labels = [str(x) for x in y_ticks]
     y_ticks_lim = (0, 20)
@@ -329,7 +398,7 @@ def create_plot(timestamp, yaml_file):
     # ax1.scatter(df["date_numeric"], df["time_numeric"], color="blue", s=5)
 
     # Plot blue points (normal times)
-    blue_mask = ~df["is_red"]
+    blue_mask = ~df["is_red"] & ~df["is_black"]
     ax1.scatter(
         df.loc[blue_mask, "date_numeric"],
         df.loc[blue_mask, "time_numeric"],
@@ -338,12 +407,22 @@ def create_plot(timestamp, yaml_file):
         s=5,
     )
 
-    # Plot red points (special times)
+    # Plot red points
     red_mask = df["is_red"]
     ax1.scatter(
         df.loc[red_mask, "date_numeric"],
         df.loc[red_mask, "time_numeric"],
         color="red",
+        label="Special",
+        s=5,
+    )
+
+    # Plot black points
+    black_mask = df["is_black"]
+    ax1.scatter(
+        df.loc[black_mask, "date_numeric"],
+        df.loc[black_mask, "time_numeric"],
+        color="black",
         label="Special",
         s=5,
     )
