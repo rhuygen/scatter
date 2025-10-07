@@ -282,7 +282,7 @@ def create_plot(timestamp, yaml_file):
     # Calculate total occurrences per day
     occurrences_per_day = df["date"].value_counts().sort_index()
 
-    window_days = 5
+    window_days = 7
 
     ax3.plot(
         fixed_locations,
@@ -357,7 +357,7 @@ def create_plot(timestamp, yaml_file):
     for date, msg in (
         (datetime.datetime(2025, 8, 1), "Entyvio 0"),
         (datetime.datetime(2025, 8, 14), "+2"),
-        # (datetime.datetime(2025, 9, 11), "+6"),
+        (datetime.datetime(2025, 9, 11), "+4"),
         # (datetime.datetime(2025, 11, 6), "+8"),
     ):
         anntotate_entyvio(
