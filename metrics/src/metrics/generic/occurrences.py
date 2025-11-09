@@ -208,21 +208,32 @@ def anntotate_entyvio(ax, date, y, label):
 
 
 def annotate_antibiotic_treatment(
-    ax, start_date, end_date, start_y, end_y, start_label, end_label
+    ax,
+    start_date,
+    end_date,
+    start_y,
+    end_y,
+    start_label,
+    end_label,
+    slha="left",
+    slva="bottom",
+    elha="right",
+    elva="top",
 ):
     """Annotate the plot with antibiotic treatment periods."""
+    relpos = {"left": 0, "center": 0.5, "right": 1}
     if start_date:
         start_date_num = mdates.date2num(start_date)
         ax.annotate(
             start_label,
             xy=(start_date_num, start_y),
             xytext=(start_date_num, start_y + 3),
-            # ha="left",  # Align text to left so arrow starts from beginning of text
-            # va="bottom",  # Align text bottom to the xytext point
+            ha=slha,  # Align text horizontally
+            va=slva,  # Align text vertically
             arrowprops=dict(
                 arrowstyle="->",
                 color="black",
-                relpos=(0, 0),
+                relpos=(relpos[slha], 0),
                 connectionstyle="arc3,rad=0",  # Straight line (no curve)
             ),
         )
@@ -234,12 +245,12 @@ def annotate_antibiotic_treatment(
             end_label,
             xy=(end_date_num, end_y),
             xytext=(end_date_num, end_y - 3),
-            ha="right",  # Align text to left so arrow starts from beginning of text
-            # va="bottom",  # Align text bottom to the xytext point
+            ha=elha,  # Align text horizontally
+            va=elva,  # Align text vertically
             arrowprops=dict(
                 arrowstyle="->",
                 color="black",
-                relpos=(1, 1),
+                relpos=(relpos[elha], 1),
                 connectionstyle="arc3,rad=0",  # Straight line (no curve)
             ),
         )
@@ -342,6 +353,7 @@ def create_plot(timestamp, yaml_file):
         end_y=4,
         start_label="start antibiotica\n(ciprofloxacine)",
         end_label="stop antibiotica",
+        slha="right",
     )
 
     annotate_antibiotic_treatment(
@@ -358,7 +370,7 @@ def create_plot(timestamp, yaml_file):
         (datetime.datetime(2025, 8, 1), "Entyvio 0"),
         (datetime.datetime(2025, 8, 14), "+2"),
         (datetime.datetime(2025, 9, 11), "+4"),
-        # (datetime.datetime(2025, 11, 6), "+8"),
+        (datetime.datetime(2025, 11, 6), "+8"),
     ):
         anntotate_entyvio(
             ax3,
