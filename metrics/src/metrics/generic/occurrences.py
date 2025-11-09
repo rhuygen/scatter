@@ -187,7 +187,9 @@ def format_seondary_yaxis(ax, yticks, yticks_lim, ytick_labels, ylabel):
     ax.yaxis.set_minor_locator(FixedLocator(range(yticks_lim[1])))
 
 
-def anntotate_entyvio(ax, date, y, label):
+def anntotate_entyvio(
+    ax, date, y, label, ha: str = "center", va: str = "bottom", relpos: tuple = (0.5, 0)
+):
     """Annotate the plot with Entyvio treatment periods."""
     if date:
         date_num = mdates.date2num(date)
@@ -196,12 +198,12 @@ def anntotate_entyvio(ax, date, y, label):
             xy=(date_num, y),
             xytext=(date_num, y + 2),
             color="blue",
-            ha="center",  # Align text to center
-            va="bottom",  # Align text bottom to the xytext point
+            ha=ha,  # Align text
+            va=va,  # Align text
             arrowprops=dict(
                 arrowstyle="->",
                 color="blue",
-                relpos=(0.5, 0),  # Center the arrow
+                relpos=relpos,  # position the arrow relative to the text
                 connectionstyle="arc3,rad=0",  # Straight line (no curve)
             ),
         )
@@ -331,7 +333,7 @@ def create_plot(timestamp, yaml_file):
         datetime.datetime(2025, 2, 10),
         start_y=10,
         end_y=4,
-        start_label="start antibiotica (ciprofloxacine)",
+        start_label="start ciprofloxacine",
         end_label="stop antibiotica",
     )
 
@@ -341,7 +343,7 @@ def create_plot(timestamp, yaml_file):
         datetime.datetime(2025, 3, 24),
         start_y=8,
         end_y=4,
-        start_label="start antibiotica (Flagyl)",
+        start_label="start Flagyl",
         end_label="stop antibiotica",
     )
 
@@ -351,7 +353,7 @@ def create_plot(timestamp, yaml_file):
         datetime.datetime(2025, 7, 7),
         start_y=11,
         end_y=4,
-        start_label="start antibiotica\n(ciprofloxacine)",
+        start_label="start ciprofloxacine",
         end_label="stop antibiotica",
         slha="right",
     )
@@ -362,22 +364,37 @@ def create_plot(timestamp, yaml_file):
         datetime.datetime(2025, 8, 15),
         start_y=11,
         end_y=4,
-        start_label="start antibiotica\n(ciprofloxacine)",
+        start_label="start ciprofloxacine",
         end_label="stop antibiotica",
     )
 
-    for date, msg in (
-        (datetime.datetime(2025, 8, 1), "Entyvio 0"),
+    for date, msg, *rest in (
+        (datetime.datetime(2025, 8, 1), "Entyvio 0", "right", "bottom", (1.0, 0)),
         (datetime.datetime(2025, 8, 14), "+2"),
         (datetime.datetime(2025, 9, 11), "+4"),
         (datetime.datetime(2025, 11, 6), "+8"),
+        (datetime.datetime(2025, 12, 30), "+8"),
+        (datetime.datetime(2026, 2, 24), "+8"),
+        (datetime.datetime(2026, 4, 21), "+8"),
     ):
-        anntotate_entyvio(
-            ax3,
-            date,
-            y=16,
-            label=f"{msg}",
-        )
+        if rest:
+            ha, va, relpos = rest
+            anntotate_entyvio(
+                ax3,
+                date,
+                y=16,
+                label=f"{msg}",
+                ha=ha,
+                va=va,
+                relpos=relpos,
+            )
+        else:
+            anntotate_entyvio(
+                ax3,
+                date,
+                y=16,
+                label=f"{msg}",
+            )
 
     y_ticks = [0, 5, 10, 15, 20]
     y_ticks_labels = [str(x) for x in y_ticks]
