@@ -129,11 +129,7 @@ def read_data(yaml_file):
 
     # Convert the data to a pandas DataFrame
     df = pd.DataFrame(
-        [
-            (date, time)
-            for date, times_list in data["data"].items()
-            for time in times_list
-        ],
+        [(date, time) for date, times_list in data["data"].items() for time in times_list],
         columns=["date", "time"],
     )
 
@@ -187,9 +183,7 @@ def format_seondary_yaxis(ax, yticks, yticks_lim, ytick_labels, ylabel):
     ax.yaxis.set_minor_locator(FixedLocator(range(yticks_lim[1])))
 
 
-def anntotate_entyvio(
-    ax, date, y, label, ha: str = "center", va: str = "bottom", relpos: tuple = (0.5, 0)
-):
+def anntotate_entyvio(ax, date, y, label, ha: str = "center", va: str = "bottom", relpos: tuple = (0.5, 0)):
     """Annotate the plot with Entyvio treatment periods."""
     if date:
         date_num = mdates.date2num(date)
@@ -268,9 +262,7 @@ def create_plot(timestamp, yaml_file):
     # Convert date and time columns to datetime
     df["date"] = pd.to_datetime(df["date"])
 
-    df[["time", "is_red", "is_black"]] = df["time"].apply(
-        lambda x: pd.Series(parse_time_with_color(x))
-    )
+    df[["time", "is_red", "is_black"]] = df["time"].apply(lambda x: pd.Series(parse_time_with_color(x)))
 
     df["time"] = pd.to_datetime(df["time"], format="%H:%M").dt.time
 
@@ -282,9 +274,7 @@ def create_plot(timestamp, yaml_file):
 
     # Plot occurrences
     # fig, ax1 = plt.subplots(figsize=(10, 6))
-    fig, (ax3, ax1) = plt.subplots(
-        2, 1, gridspec_kw={"height_ratios": [4, 4]}, sharex=True, figsize=(12, 8)
-    )
+    fig, (ax3, ax1) = plt.subplots(2, 1, gridspec_kw={"height_ratios": [4, 4]}, sharex=True, figsize=(12, 8))
 
     fig.suptitle(FIG_TITLE, fontsize=16)
 
@@ -374,8 +364,11 @@ def create_plot(timestamp, yaml_file):
         (datetime.datetime(2025, 9, 11), "+4"),
         (datetime.datetime(2025, 11, 6), "+8"),
         (datetime.datetime(2025, 12, 30), "+8"),
-        (datetime.datetime(2026, 2, 24), "+8"),
-        (datetime.datetime(2026, 4, 21), "+8"),
+        (datetime.datetime(2026, 1, 26), "+4"),
+        (datetime.datetime(2026, 2, 24), "+4"),
+        (datetime.datetime(2026, 3, 26), "+4"),
+        (datetime.datetime(2026, 4, 21), "+4"),
+        (datetime.datetime(2026, 5, 20), "+4"),
     ):
         if rest:
             ha, va, relpos = rest
@@ -408,9 +401,7 @@ def create_plot(timestamp, yaml_file):
     ax3.yaxis.set_minor_locator(FixedLocator(range(y_ticks_lim[1])))
 
     # Remove ticks from the bottom x-axis
-    ax3.tick_params(
-        axis="x", which="both", bottom=False, top=False, length=0, labelbottom=False
-    )
+    ax3.tick_params(axis="x", which="both", bottom=False, top=False, length=0, labelbottom=False)
 
     ax3.grid(True)
 
@@ -424,37 +415,40 @@ def create_plot(timestamp, yaml_file):
         ylabel=y_label,
     )
 
-    # ax1.scatter(df["date_numeric"], df["time_numeric"], color="blue", s=5)
+    NO_COLOR = True
 
-    # Plot blue points (normal times)
-    blue_mask = ~df["is_red"] & ~df["is_black"]
-    ax1.scatter(
-        df.loc[blue_mask, "date_numeric"],
-        df.loc[blue_mask, "time_numeric"],
-        color="blue",
-        label="Normal",
-        s=5,
-    )
+    if NO_COLOR:
+        ax1.scatter(df["date_numeric"], df["time_numeric"], color="blue", s=5)
+    else:
+        # Plot blue points (normal times)
+        blue_mask = ~df["is_red"] & ~df["is_black"]
+        ax1.scatter(
+            df.loc[blue_mask, "date_numeric"],
+            df.loc[blue_mask, "time_numeric"],
+            color="blue",
+            label="Normal",
+            s=5,
+        )
 
-    # Plot red points
-    red_mask = df["is_red"]
-    ax1.scatter(
-        df.loc[red_mask, "date_numeric"],
-        df.loc[red_mask, "time_numeric"],
-        color="red",
-        label="Special",
-        s=5,
-    )
+        # Plot red points
+        red_mask = df["is_red"]
+        ax1.scatter(
+            df.loc[red_mask, "date_numeric"],
+            df.loc[red_mask, "time_numeric"],
+            color="red",
+            label="Special",
+            s=5,
+        )
 
-    # Plot black points
-    black_mask = df["is_black"]
-    ax1.scatter(
-        df.loc[black_mask, "date_numeric"],
-        df.loc[black_mask, "time_numeric"],
-        color="black",
-        label="Special",
-        s=5,
-    )
+        # Plot black points
+        black_mask = df["is_black"]
+        ax1.scatter(
+            df.loc[black_mask, "date_numeric"],
+            df.loc[black_mask, "time_numeric"],
+            color="black",
+            label="Special",
+            s=5,
+        )
 
     ax1.set_xlabel("Date")
     ax1.set_ylabel("Time (hour)")
@@ -479,12 +473,8 @@ def create_plot(timestamp, yaml_file):
     night_start = 22  # 22:00 in the evening
     night_end = 8  # 08:00 in the morning
 
-    ax1.axhspan(
-        night_start, 24, facecolor="gray", alpha=0.3
-    )  # Night from 18:00 to midnight
-    ax1.axhspan(
-        0, night_end, facecolor="gray", alpha=0.3
-    )  # Night from midnight to 06:00
+    ax1.axhspan(night_start, 24, facecolor="gray", alpha=0.3)  # Night from 18:00 to midnight
+    ax1.axhspan(0, night_end, facecolor="gray", alpha=0.3)  # Night from midnight to 06:00
 
     # Set fixed y-axis ticks at [0, 8, 12, 18, 22, 24] hours
     y_ticks_lim = (0, 24)
